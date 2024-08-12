@@ -25,19 +25,21 @@ from io import BytesIO
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+# load_dotenv()
 
-# Set your OpenAI API key from environment variable
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# # Set your OpenAI API key from environment variable
+# openai.api_key = os.getenv('OPENAI_API_KEY')
 
-# Set your Telegram bot token and chat ID
-telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
+# # Set your Telegram bot token and chat ID
+# telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
 telegram_chat_id = '-1002164741954'  # This can stay hardcoded or also be moved to an environment variable if needed
+st.secrets["OPENAI_API_KEY"]
+st.secrets["TELEGRAM_BOT_TOKEN"]
 
 # Email configuration
 from_email = "seaklav168@gmail.com"
-password = os.getenv('EMAIL_PASSWORD')
-
+# password = os.getenv('EMAIL_PASSWORD')
+password = st.secrets["EMAIL_PASSWORD"]
 def send_to_telegram(file_path, caption):
     url = f"https://api.telegram.org/bot{telegram_bot_token}/sendDocument"
     with open(file_path, 'rb') as file:
