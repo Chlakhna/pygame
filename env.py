@@ -306,24 +306,21 @@ def save_report_as_word(report, filename):
 #                 time.sleep(delay)
 #             else:
 #                 st.error("Failed to convert Word to PDF after multiple attempts.")
+
+import pypandoc
+
 def convert_to_pdf_with_retry(word_filename, pdf_filename, retries=3, delay=5):
     for attempt in range(retries):
         try:
-            convert(word_filename, pdf_filename)
-            if os.path.exists(pdf_filename):
-                st.success("Conversion successful!")
-                return True
-            else:
-                st.error(f"Conversion failed. {pdf_filename} not found.")
-                return False
+            pypandoc.convert(word_filename, 'pdf', outputfile=pdf_filename)
+            st.success("Conversion successful!")
+            return
         except Exception as e:
             st.error(f"Attempt {attempt + 1} failed: {e}")
             if attempt < retries - 1:
                 time.sleep(delay)
             else:
                 st.error("Failed to convert Word to PDF after multiple attempts.")
-                return False
-
 
 def create_zip_file(word_filename, pdf_filename, zip_filename):
     try:
