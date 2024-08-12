@@ -33,12 +33,14 @@ load_dotenv()
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Set your Telegram bot token and chat ID
-telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
+# telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
+telegram_bot_token = st.secrets["TELEGRAM_BOT_TOKEN"]
 telegram_chat_id = '-1002164741954'  # This can stay hardcoded or also be moved to an environment variable if needed
 
 # Email configuration
 from_email = "seaklav168@gmail.com"
-password = os.getenv('EMAIL_PASSWORD')
+# password = os.getenv('EMAIL_PASSWORD')
+password = st.secrets["EMAIL_PASSWORD"]
 
 def send_to_telegram(file_path, caption):
     url = f"https://api.telegram.org/bot{telegram_bot_token}/sendDocument"
