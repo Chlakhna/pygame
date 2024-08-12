@@ -294,18 +294,36 @@ def save_report_as_word(report, filename):
 #         st.success(f"Zip file {zip_filename} created successfully.")
 #     except Exception as e:
 #         st.error(f"Failed to create zip file: {e}")
+# def convert_to_pdf_with_retry(word_filename, pdf_filename, retries=3, delay=5):
+#     for attempt in range(retries):
+#         try:
+#             convert(word_filename, pdf_filename)
+#             st.success("Conversion successful!")
+#             return
+#         except Exception as e:
+#             st.error(f"Attempt {attempt + 1} failed: {e}")
+#             if attempt < retries - 1:
+#                 time.sleep(delay)
+#             else:
+#                 st.error("Failed to convert Word to PDF after multiple attempts.")
 def convert_to_pdf_with_retry(word_filename, pdf_filename, retries=3, delay=5):
     for attempt in range(retries):
         try:
             convert(word_filename, pdf_filename)
-            st.success("Conversion successful!")
-            return
+            if os.path.exists(pdf_filename):
+                st.success("Conversion successful!")
+                return True
+            else:
+                st.error(f"Conversion failed. {pdf_filename} not found.")
+                return False
         except Exception as e:
             st.error(f"Attempt {attempt + 1} failed: {e}")
             if attempt < retries - 1:
                 time.sleep(delay)
             else:
                 st.error("Failed to convert Word to PDF after multiple attempts.")
+                return False
+
 
 def create_zip_file(word_filename, pdf_filename, zip_filename):
     try:
