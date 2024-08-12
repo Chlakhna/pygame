@@ -294,10 +294,38 @@ def save_report_as_word(report, filename):
 #         st.success(f"Zip file {zip_filename} created successfully.")
 #     except Exception as e:
 #         st.error(f"Failed to create zip file: {e}")
+# def convert_to_pdf_with_retry(word_filename, pdf_filename, retries=3, delay=5):
+#     for attempt in range(retries):
+#         try:
+#             convert(word_filename, pdf_filename)
+#             st.success("Conversion successful!")
+#             return
+#         except Exception as e:
+#             st.error(f"Attempt {attempt + 1} failed: {e}")
+#             if attempt < retries - 1:
+#                 time.sleep(delay)
+#             else:
+#                 st.error("Failed to convert Word to PDF after multiple attempts.")
+
+import weasyprint
+from docx import Document
+
+def convert_docx_to_pdf(word_filename, pdf_filename):
+    # Open the Word document
+    doc = Document(word_filename)
+    
+    # Convert the Word document content to HTML
+    html_content = ""
+    for para in doc.paragraphs:
+        html_content += f"<p>{para.text}</p>"
+    
+    # Convert HTML to PDF using WeasyPrint
+    pdf = weasyprint.HTML(string=html_content).write_pdf(pdf_filename)
+
 def convert_to_pdf_with_retry(word_filename, pdf_filename, retries=3, delay=5):
     for attempt in range(retries):
         try:
-            convert(word_filename, pdf_filename)
+            convert_docx_to_pdf(word_filename, pdf_filename)
             st.success("Conversion successful!")
             return
         except Exception as e:
